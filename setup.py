@@ -43,7 +43,7 @@ versioneer.parentdir_prefix = 'gnupg-'
 
 __author__ = "Isis Agora Lovecruft"
 __contact__ = 'isis@patternsinthevoid.net'
-__url__ = 'https://github.com/agentOfChaos/python-gnupg.git'
+__url__ = 'https://github.com/isislovecruft/python-gnupg.git'
 
 
 def python26():
@@ -130,7 +130,7 @@ or Linux, with Python 2.6, Python 2.7, Python 3.3, Python 3.4, or PyPy.
                              "sphinxcontrib-fulltoc==1.0"]},
 
     platforms="Linux, BSD, OSX, Windows",
-    download_url="https://github.com/agentOfChaos/python-gnupg/archive/master.zip",
+    download_url="https://github.com/isislovecruft/python-gnupg/archive/master.zip",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
