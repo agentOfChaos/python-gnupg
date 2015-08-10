@@ -539,6 +539,7 @@ def _get_options_group(group=None):
                               '--personal-compress-prefs',
                               '--personal-compress-preferences',
                               '--print-md',
+                              '--search-keys',
                               ])
     #: These options expect no arguments
     none_options = frozenset(['--always-trust',
@@ -780,6 +781,7 @@ def _get_all_gnupg_options():
 --max-output                      --with-fingerprint
 --merge-only                      --with-key-data
 --min-cert-level                  --yes
+--search-keys
 """).split()
 
     # These are extra options which only exist for GnuPG>=2.0.0

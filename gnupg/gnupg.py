@@ -507,8 +507,7 @@ class GPG(GPGBase):
         if HEX_DIGITS_RE.match(query):
             query = '0x' + query
         args = ['--fixed-list-mode', '--fingerprint', '--with-colons',
-                '--keyserver', keyserver, '--search-keys',
-                query]
+                '--keyserver ' + keyserver, '--search-keys ' + query]
         p = self._open_subprocess(args)
 
         # Get the response information
