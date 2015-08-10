@@ -37,6 +37,14 @@ from ._util import log
 
 ESCAPE_PATTERN = re.compile(r'\\x([0-9a-f][0-9a-f])', re.I)
 HEXIDECIMAL    = re.compile('([0-9A-Fa-f]{2})+')
+BASIC_ESCAPES = {
+    r'\n': '\n',
+    r'\r': '\r',
+    r'\f': '\f',
+    r'\v': '\v',
+    r'\b': '\b',
+    r'\0': '\0',
+}
 
 
 class ProtectedOption(Exception):
@@ -1142,6 +1150,46 @@ class ImportResult(object):
         if self.counts['not_imported']:
             l.append('%d not imported' % self.counts['not_imported'])
         return ', '.join(l)
+
+
+class SearchKeys(list):
+    ''' Handle status messages for --search-keys.
+
+        Handle pub and uid (relating the latter to the former).
+
+        Don't care about the rest
+    '''
+
+    UID_INDEX = 1
+    FIELDS = 'type keyid algo length date expires'.split()
+
+    def __init__(self, gpg):
+        self.gpg = gpg
+        self.curkey = None
+        self.fingerprints = []
+        self.uids = []
+
+    def get_fields(self, args):
+        result = {}
+        for i, var in enumerate(self.FIELDS):
+            result[var] = args[i]
+        result['uids'] = []
+        return result
+
+    def pub(self, args):
+        self.curkey = curkey = self.get_fields(args)
+        self.append(curkey)
+
+    def uid(self, args):
+        uid = args[self.UID_INDEX]
+        uid = ESCAPE_PATTERN.sub(lambda m: chr(int(m.group(1), 16)), uid)
+        for k, v in BASIC_ESCAPES.items():
+            uid = uid.replace(k, v)
+        self.curkey['uids'].append(uid)
+        self.uids.append(uid)
+
+    def handle_status(self, key, value):
+        pass
 
 
 class Verify(object):

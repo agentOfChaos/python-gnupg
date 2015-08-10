@@ -145,7 +145,8 @@ class GPGBase(object):
                        'list':     _parsers.ListKeys,
                        'sign':     _parsers.Sign,
                        'verify':   _parsers.Verify,
-                       'packets':  _parsers.ListPackets }
+                       'packets': _parsers.ListPackets,
+                       'search': _parsers.SearchKeys}
 
     def __init__(self, binary=None, home=None, keyring=None, secring=None,
                  use_agent=False, default_preference_list=None,
