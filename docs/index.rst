@@ -38,7 +38,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-.. _source: https://github.com/isislovecruft/python-gnupg
-.. _repository: https://github.com/isislovecruft/python-gnupg
+.. _source: https://github.com/agentOfChaos/python-gnupg
+.. _repository: https://github.com/agentOfChaos/python-gnupg
 .. _GPLv3: https://www.gnu.org/licenses/gpl.txt
-.. _bugtracker: https://github.com/isislovecruft/python-gnupg/issues
+.. _bugtracker: https://github.com/agentOfChaos/python-gnupg/issues
