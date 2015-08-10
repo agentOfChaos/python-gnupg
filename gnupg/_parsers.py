@@ -1164,6 +1164,7 @@ class SearchKeys(list):
     FIELDS = 'type keyid algo length date expires'.split()
 
     def __init__(self, gpg):
+        super(SearchKeys, self).__init__()
         self.gpg = gpg
         self.curkey = None
         self.fingerprints = []
@@ -1188,7 +1189,7 @@ class SearchKeys(list):
         self.curkey['uids'].append(uid)
         self.uids.append(uid)
 
-    def handle_status(self, key, value):
+    def _handle_status(self, key, value):
         pass
 
 
