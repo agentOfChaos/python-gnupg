@@ -46,6 +46,7 @@ from ._util    import _is_stream
 from ._util    import _make_binary_stream
 from ._util    import log
 
+HEX_DIGITS_RE = re.compile(r'[0-9a-f]+$', re.I)
 
 class GPG(GPGBase):
     """Python interface for handling interactions with GnuPG, including keyfile
@@ -486,6 +487,48 @@ class GPG(GPGBase):
         lines = result.data.decode(self._encoding,
                                    self._decode_errors).splitlines()
         self._parse_keys(result)
+        return result
+
+    def search_keys(self, query, keyserver='pgp.mit.edu'):
+        """ search keyserver by query (using --search-keys option)
+
+        >>> import shutil
+        >>> shutil.rmtree('keys')
+        >>> gpg = GPG(gnupghome='keys')
+        >>> os.chmod('keys', 0x1C0)
+        >>> result = gpg.search_keys('<vinay_sajip@hotmail.com>')
+        >>> assert result, 'Failed using default keyserver'
+        >>> keyserver = 'keyserver.ubuntu.com'
+        >>> result = gpg.search_keys('<vinay_sajip@hotmail.com>', keyserver)
+        >>> assert result, 'Failed using keyserver.ubuntu.com'
+
+        """
+        query = query.strip()
+        if HEX_DIGITS_RE.match(query):
+            query = '0x' + query
+        args = ['--fixed-list-mode', '--fingerprint', '--with-colons',
+                '--keyserver', keyserver, '--search-keys',
+                query]
+        p = self._open_subprocess(args)
+
+        # Get the response information
+        result = self._result_map['search'](self)
+        self._collect_output(p, result, stdin=p.stdin)
+        lines = result.data.decode(self._encoding,
+                                   self._decode_errors).splitlines()
+        valid_keywords = ['pub', 'uid']
+        for line in lines:
+            if self.verbose:
+                print(line)
+            log.debug('line: %r', line.rstrip())
+            if not line:  # sometimes get blank lines on Windows
+                continue
+            L = line.strip().split(':')
+            if not L:
+                continue
+            keyword = L[0]
+            if keyword in valid_keywords:
+                getattr(result, keyword)(L)
         return result
 
     def list_packets(self, raw_data):
